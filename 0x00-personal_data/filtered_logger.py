@@ -9,7 +9,7 @@ from typing import List
 from mysql.connector import connection
 
 
-PII_FIELDS = ("email", "phone" "ssn", "password", "ip", "last_login")
+PII_FIELDS = ("name", "email", "phone" "ssn", "password")
 
 
 class RedactingFormatter(logging.Formatter):
