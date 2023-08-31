@@ -20,7 +20,6 @@ def filter_datum(
     :return: the log message obfuscated
     """
     for field in fields:
-        pattern = r"{}=.*?{}".format(field, separator)
         replacement = "{}={}{}".format(field, redaction, separator)
-        message = re.sub(pattern, replacement, message)
+        message = re.sub(rf"{field}=.*?{separator}", replacement, message)
     return message
