@@ -81,14 +81,23 @@ def get_db() -> connection.MySQLConnection:
 
 def main() -> None:
     """Retrieve all rows in users table"""
+    cols = [
+        "name",
+        "email",
+        "phone" "ssn",
+        "password",
+        "ip",
+        "last_login",
+        "user_agent",
+    ]
     db = get_db()
     cursor = db.cursor()
-    cursor.execute("SELECT COUNT(*) FROM users;")
-    formatter = RedactingFormatter(
-        fields=["name", "email", "phone", "ssn", "password"]
-    )
-    for row in cursor:
-        print(formatter.format(row))
+    cursor.execute("SELECT * FROM users;")
+    rows = cursor.fetchall()
+    logger = get_logger()
+    for row in rows:
+        msg = "; ".join(f"{col}={val}" for col, val in zip(cols, row))
+        logger.info(msg)
     cursor.close()
     db.close()
 
