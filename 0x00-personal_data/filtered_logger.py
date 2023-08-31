@@ -84,7 +84,8 @@ def main() -> None:
     cols = [
         "name",
         "email",
-        "phone" "ssn",
+        "phone",
+        "ssn",
         "password",
         "ip",
         "last_login",
