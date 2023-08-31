@@ -5,10 +5,13 @@ Regex-ing
 import re
 from typing import List
 
-def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:
+
+def filter_datum(
+    fields: List[str], redaction: str, message: str, separator: str
+) -> str:
     """
     The function `filter_datum` obfuscates a list of log messages
-    
+
     :param fields: a list of strings representing all fields to obfuscate
     :param redaction: a string representing by what the field will be obfuscated
     :param message: a string representing the log line
@@ -17,7 +20,7 @@ def filter_datum(fields: List[str], redaction: str, message: str, separator: str
     :return: the log message obfuscated
     """
     for field in fields:
-        pattern = r'{}=.*?{}'.format(field, separator)
+        pattern = r"{}=.*?{}".format(field, separator)
         replacement = "{}={}{}".format(field, redaction, separator)
         message = re.sub(pattern, replacement, message)
     return message
