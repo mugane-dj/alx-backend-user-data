@@ -3,8 +3,11 @@
 Regex-ing
 """
 import re
+import os
 import logging
 from typing import List
+from mysql.connector import connection
+
 
 PII_FIELDS = ("email", "phone" "ssn", "password", "ip", "last_login")
 
@@ -63,3 +66,13 @@ def get_logger() -> logging.Logger:
     log_handler.setFormatter(RedactingFormatter(fields=list(PII_FIELDS)))
     logger.addHandler(log_handler)
     return logger
+
+
+def get_db() -> connection.MySQLConnection:
+    """Returns a mysql connection"""
+    return connection.MySQLConnection(
+        host=os.environ.get("PERSONAL_DATA_DB_HOST"),
+        user=os.environ.get("PERSONAL_DATA_DB_USERNAME"),
+        password=os.environ.get("PERSONAL_DATA_DB_PASSWORD"),
+        database=os.environ.get("PERSONAL_DATA_DB_NAME"),
+    )
