@@ -73,6 +73,7 @@ def get_db() -> connection.MySQLConnection:
     """Returns a mysql connection"""
     return connection.MySQLConnection(
         host=os.environ.get("PERSONAL_DATA_DB_HOST", default="localhost"),
+        port=3306,
         user=os.environ.get("PERSONAL_DATA_DB_USERNAME", default="root"),
         password=os.environ.get("PERSONAL_DATA_DB_PASSWORD", default=""),
         database=os.environ.get("PERSONAL_DATA_DB_NAME"),
