@@ -5,6 +5,7 @@ Regex-ing
 import re
 import os
 import logging
+import bcrypt
 from typing import List
 from mysql.connector import connection
 
@@ -91,6 +92,13 @@ def main() -> None:
         print(formatter.format(row))
     cursor.close()
     db.close()
+
+
+def is_valid(hashed_password: bytes, password: str) -> bool:
+    """Checks if password matches the hashed_password provided"""
+    if bcrypt.hashpw(password) == hashed_password:
+        return True
+    return False
 
 
 if __name__ == "__main__":
