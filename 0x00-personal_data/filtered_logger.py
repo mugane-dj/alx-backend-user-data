@@ -63,7 +63,8 @@ def get_logger() -> logging.Logger:
     logger.propagate = False
     logger.setLevel(logging.INFO)
     log_handler = logging.StreamHandler()
-    log_handler.setFormatter(RedactingFormatter(fields=list(PII_FIELDS)))
+    formatter = RedactingFormatter(fields=list(PII_FIELDS))
+    log_handler.setFormatter(formatter)
     logger.addHandler(log_handler)
     return logger
 
@@ -76,3 +77,21 @@ def get_db() -> connection.MySQLConnection:
         password=os.environ.get("PERSONAL_DATA_DB_PASSWORD", default=""),
         database=os.environ.get("PERSONAL_DATA_DB_NAME"),
     )
+
+
+def main() -> None:
+    """Retrieve all rows in users table"""
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT COUNT(*) FROM users;")
+    formatter = RedactingFormatter(
+        fields=["name", "email", "phone", "ssn", "password"]
+    )
+    for row in cursor:
+        print(formatter.format(row))
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
