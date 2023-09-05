@@ -20,6 +20,7 @@ if getenv("AUTH_TYPE") == "auth":
 
 @app.before_request
 def handle_before_request():
+    """Filter requests"""
     if auth is None:
         return
 
