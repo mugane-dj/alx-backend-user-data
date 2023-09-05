@@ -2,7 +2,7 @@
 """
 Auth class
 """
-from flask import request, Request
+from flask import request
 from typing import TypeVar, List
 
 
@@ -13,10 +13,10 @@ class Auth:
         """Require auth"""
         return False, path, excluded_paths
 
-    def authorization_header(self, request: Request = None) -> str:
+    def authorization_header(self, request=None) -> str:
         """Authorization header"""
         return None
 
-    def current_user(self, request: Request = None) -> TypeVar("User"):
+    def current_user(self, request=None) -> TypeVar("User"):
         """Current user"""
         return None
