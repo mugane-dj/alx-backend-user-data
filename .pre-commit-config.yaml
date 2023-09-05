@@ -28,4 +28,4 @@ repos:
     rev: v0.0.261
     hooks:
       - id: ruff
-        args: [--fix, --ignore=E402, --ignore=F403, --ignore=F405]
+        args: [--fix, --ignore=E402, --ignore=F401, --ignore=F811, --ignore=F405]
