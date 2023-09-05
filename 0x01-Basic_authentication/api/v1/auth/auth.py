@@ -7,11 +7,11 @@ from typing import TypeVar, List
 
 
 class Auth:
-    """Auth class"""
+    """Auth class to manage the API authentication"""
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Require auth"""
-        return False, path, excluded_paths
+        return False
 
     def authorization_header(self, request=None) -> str:
         """Authorization header"""
