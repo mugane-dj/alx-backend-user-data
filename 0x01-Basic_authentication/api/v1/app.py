@@ -5,6 +5,7 @@ Route module for the API
 from os import getenv
 from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
+from api.v1.auth.auth import Auth
 from flask_cors import CORS
 
 
@@ -14,8 +15,6 @@ CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
 
 if getenv("AUTH_TYPE") == "auth":
-    from api.v1.auth.auth import Auth
-
     auth = Auth()
 
 
