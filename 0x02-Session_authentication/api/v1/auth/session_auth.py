@@ -4,6 +4,7 @@ An implementation of session authentication
 """
 import uuid
 from api.v1.auth.auth import Auth
+from models.user import User
 
 
 class SessionAuth(Auth):
@@ -24,3 +25,9 @@ class SessionAuth(Auth):
         if session_id is None or not isinstance(session_id, uuid.UUID):
             return None
         return self.user_id_by_session_id.get(session_id)
+
+    def current_user(self, request=None):
+        """Retrieves current User instance based on a cookie value"""
+        session_id = super().session_cookie(request)
+        user_id = self.user_id_for_session_id(session_id=session_id)
+        return User.get(user_id)
