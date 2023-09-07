@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Session view"""
 from models.user import User
-from flask import request, jsonify
+from flask import request, jsonify, abort
 from api.v1.views import app_views
 
 
 @app_views.route("/auth_session/login", methods=["POST"], strict_slashes=False)
-def login():
+def login() -> str:
     """Handle login and create session ID"""
     email = request.form.get("email")
     password = request.form.get("password")
@@ -29,3 +29,16 @@ def login():
 
         auth.create_session(user.id)
         return user.to_json()
+
+
+@app_views.route(
+    "/auth_session/logout", methods=["DELETE"], strict_slashes=False
+)
+def logout() -> str:
+    """Handle logout and destroy user session"""
+    from api.v1.app import auth
+
+    if not auth.destroy_session(request):
+        abort(404)
+        return False
+    return jsonify({}), 200
