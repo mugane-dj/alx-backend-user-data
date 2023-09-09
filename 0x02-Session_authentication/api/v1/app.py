@@ -18,9 +18,9 @@ auth = None
 
 if getenv("AUTH_TYPE") == "auth":
     auth = Auth()
-elif getenv("AUTH_TYPE") == "basic_auth":
+if getenv("AUTH_TYPE") == "basic_auth":
     auth = BasicAuth()
-elif getenv("AUTH_TYPE") == "session_auth":
+if getenv("AUTH_TYPE") == "session_auth":
     auth = SessionAuth()
 
 
