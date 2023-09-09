@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Session view"""
+from os import getenv
 from models.user import User
 from flask import request, jsonify, abort
 from api.v1.views import app_views
@@ -27,8 +28,10 @@ def login() -> str:
 
         from api.v1.app import auth
 
-        auth.create_session(user.id)
-        return user.to_json()
+        session_id = auth.create_session(user.id)
+        output = jsonify(user.to_json())
+        output.set_cookie(getenv("SESSION_NAME"), session_id)
+        return output
 
 
 @app_views.route(
