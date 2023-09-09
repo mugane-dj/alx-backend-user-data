@@ -3,6 +3,7 @@
 An implementation of session authentication
 """
 import uuid
+from typing import TypeVar
 from api.v1.auth.auth import Auth
 from models.user import User
 
@@ -26,13 +27,13 @@ class SessionAuth(Auth):
             return None
         return self.user_id_by_session_id.get(session_id)
 
-    def current_user(self, request=None):
+    def current_user(self, request=None) -> TypeVar("User"):
         """Retrieves current User instance based on a cookie value"""
         session_id = self.session_cookie(request)
-        user_id = self.user_id_for_session_id(session_id)
+        user_id = self.user_id_for_session_id(uuid.UUID(session_id))
         return User.get(user_id)
 
-    def destroy_session(self, request=None):
+    def destroy_session(self, request=None) -> bool:
         """Destroys the create session after user logs out"""
         if request is None:
             return False
