@@ -4,6 +4,7 @@ DB module
 """
 from sqlalchemy import create_engine
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
@@ -44,3 +45,13 @@ class DB:
         if not user:
             raise NoResultFound
         return user
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """Update a user instance"""
+        user = self.find_user_by(id=user_id)
+        session = self._session
+        for k, v in kwargs.items():
+            if k not in dir(User):
+                raise ValueError
+            setattr(user, k, v)
+        session.commit()
