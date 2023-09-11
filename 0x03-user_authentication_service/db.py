@@ -3,6 +3,7 @@
 DB module
 """
 from sqlalchemy import create_engine
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
@@ -34,4 +35,12 @@ class DB:
         user = User(email=email, hashed_password=hashed_password)
         session.add(user)
         session.commit()
+        return user
+
+    def find_user_by(self, **kwargs) -> TypeVar("User"):
+        """Find user in DB"""
+        session = self._session
+        user = session.query(User).filter_by(**kwargs).first()
+        if not user:
+            raise NoResultFound
         return user
