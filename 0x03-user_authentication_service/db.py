@@ -38,20 +38,20 @@ class DB:
         session.commit()
         return user
 
-    def find_user_by(self, **kwargs) -> TypeVar("User"):
-        """Find user in DB"""
-        session = self._session
-        user = session.query(User).filter_by(**kwargs).first()
-        if not user:
-            raise NoResultFound
-        return user
+    # def find_user_by(self, **kwargs) -> TypeVar("User"):
+    #     """Find user in DB"""
+    #     session = self._session
+    #     user = session.query(User).filter_by(**kwargs).first()
+    #     if not user:
+    #         raise NoResultFound
+    #     return user
 
-    def update_user(self, user_id: int, **kwargs) -> None:
-        """Update a user instance"""
-        user = self.find_user_by(id=user_id)
-        session = self._session
-        for k, v in kwargs.items():
-            if k not in dir(User):
-                raise ValueError
-            setattr(user, k, v)
-        session.commit()
+    # def update_user(self, user_id: int, **kwargs) -> None:
+    #     """Update a user instance"""
+    #     user = self.find_user_by(id=user_id)
+    #     session = self._session
+    #     for k, v in kwargs.items():
+    #         if k not in dir(User):
+    #             raise ValueError
+    #         setattr(user, k, v)
+    #     session.commit()
