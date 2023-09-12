@@ -3,6 +3,7 @@
 DB module
 """
 from sqlalchemy import create_engine
+from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
@@ -36,8 +37,13 @@ class DB:
 
     def find_user_by(self, **kwargs) -> User:
         """Find user in DB"""
-        session = self._session
-        user = session.query(User).filter_by(**kwargs).first()
+        filtered_kwargs = {}
+        for k, v in kwargs.items():
+            if hasattr(User, k):
+                filtered_kwargs[k] = v
+            else:
+                raise InvalidRequestError
+        user = self._session.query(User).filter_by(**filtered_kwargs).first()
         if not user:
             raise NoResultFound
         return user
