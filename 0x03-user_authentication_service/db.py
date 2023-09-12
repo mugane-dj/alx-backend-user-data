@@ -37,16 +37,13 @@ class DB:
 
     def find_user_by(self, **kwargs) -> User:
         """Find user in DB"""
-        filtered_kwargs = {}
-        for k, v in kwargs.items():
-            if hasattr(User, k):
-                filtered_kwargs[k] = v
-            else:
-                raise InvalidRequestError
-        user = self._session.query(User).filter_by(**filtered_kwargs).first()
-        if not user:
-            raise NoResultFound
-        return user
+        try:
+            user = self._session.query(User).filter_by(**kwargs).first()
+            if user is None:
+                raise NoResultFound
+            return user
+        except InvalidRequestError:
+            raise InvalidRequestError
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """Update a user instance"""
