@@ -38,3 +38,23 @@ class DB:
             self._session.rollback()
             user = None
         return user
+
+    def find_user_by(self, **kwargs) -> User:
+        """Find user in DB"""
+        try:
+            user = self._session.query(User).filter_by(**kwargs).first()
+            if user is None:
+                raise NoResultFound
+            return user
+        except Exception:
+            raise InvalidRequestError
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """Update a user instance"""
+        user = self.find_user_by(id=user_id)
+        session = self._session
+        for k, v in kwargs.items():
+            if not hasattr(User, k):
+                raise ValueError
+            setattr(user, k, v)
+        session.commit()
