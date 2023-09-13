@@ -50,4 +50,4 @@ class Auth:
             user.session_id = _generate_uuid()
             return user.session_id
         except NoResultFound:
-            return
+            return None
