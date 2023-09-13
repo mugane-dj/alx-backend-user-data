@@ -30,13 +30,9 @@ class DB:
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """Add user to DB"""
-        try:
-            user = User(email=email, hashed_password=hashed_password)
-            self._session.add(user)
-            self._session.commit()
-        except Exception:
-            self._session.rollback()
-            user = None
+        user = User(email=email, hashed_password=hashed_password)
+        self._session.add(user)
+        self._session.commit()
         return user
 
     def find_user_by(self, **kwargs) -> User:
@@ -44,9 +40,7 @@ class DB:
         try:
             user = self._session.query(User).filter_by(**kwargs).first()
             return user
-        except NoResultFound as error:
-            raise error
-        except InvalidRequestError as error:
+        except (NoResultFound, InvalidRequestError) as error:
             raise error
 
     def update_user(self, user_id: int, **kwargs) -> None:
