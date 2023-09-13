@@ -39,8 +39,10 @@ class DB:
         """Find user in DB"""
         try:
             user = self._session.query(User).filter_by(**kwargs).first()
+            if user is None:
+                raise NoResultFound
             return user
-        except (NoResultFound, InvalidRequestError) as error:
+        except InvalidRequestError as error:
             raise error
 
     def update_user(self, user_id: int, **kwargs) -> None:
