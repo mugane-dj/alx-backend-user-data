@@ -27,20 +27,18 @@ class Auth:
 
     def register_user(self, email: str, password: str) -> User:
         """Creates a user in the db"""
-        user = self._db.find_user_by(email=email)
-        if user:
-            raise ValueError("User {} already exists".format(email))
-        self._db.add_user(
-            email=email, hashed_password=_hash_password(password)
-        )
+        try:
+            self._db.find_user_by(email=email)
+            raise ValueError(f"User {email} already exists")
+        except NoResultFound:
+            return self._db.add_user(email, _hash_password(password))
 
     def valid_login(self, email: str, password: str) -> bool:
         """Check email and password to corresponding user records"""
         try:
             user = self._db.find_user_by(email=email)
             return bcrypt.checkpw(
-                password=password.encode("utf-8"),
-                hashed_password=user.hashed_password,
+                password.encode("utf-8"), user.hashed_password
             )
         except NoResultFound:
             return False
