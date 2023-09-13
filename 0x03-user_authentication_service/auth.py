@@ -16,7 +16,7 @@ def _hash_password(password: str) -> bytes:
 
 def _generate_uuid() -> str:
     """Generate UUID string"""
-    return str(uuid.uuid4)
+    return str(uuid.uuid4())
 
 
 class Auth:
@@ -47,7 +47,8 @@ class Auth:
         """Creates a session id for an existing user"""
         try:
             user = self._db.find_user_by(email=email)
-            user.session_id = _generate_uuid()
-            return user.session_id
+            session_id = _generate_uuid()
+            user.session_id = session_id
+            return session_id
         except NoResultFound:
             return None
